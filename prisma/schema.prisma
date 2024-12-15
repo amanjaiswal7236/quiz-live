@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([name])
+}
+
+model User {
+  id              String     @id @default(uuid())
+  email           String     @unique
+  username        String?
+  externalUserId  String     @unique
+  imageUrl        String     @db.Text
+  quizzes         Quiz[]     @relation("QuizCreator")
+  responses       Response[]
+
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+model Quiz {
+  id          String      @id @default(uuid())
+  title       String
+  description String?
+  questions   Question[]
+  creatorId   String
+  creator     User        @relation("QuizCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  responses   Response[]
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Question {
+  id          String    @id @default(uuid())
+  text        String
+  quizId      String
+  quiz        Quiz      @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  answers     Answer[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Answer {
+  id          String    @id @default(uuid())
+  text        String
+  isCorrect   Boolean   @default(false)
+  questionId  String
+  question    Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  responses   Response[]
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Response {
+  id          String    @id @default(uuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quizId      String
+  quiz        Quiz      @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  answerId    String?
+  answer      Answer?   @relation(fields: [answerId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
