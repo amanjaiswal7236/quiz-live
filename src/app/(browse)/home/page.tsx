@@ -175,7 +175,7 @@ export default function Page() {
                         <h2 className="text-2xl font-semibold mb-4">Popular templates in Education</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                             {templates.map((template, index) => (
-                                <Card key={index} className="transition-all duration-300 hover:border-purple-700 hover:scale-105 cursor-pointer" onClick={() => console.log(`Clicked on ${template}`)}>
+                                <Card key={index} className="transition-all duration-300 hover:border-purple-700 hover:scale-105 cursor-pointer" onClick={() => console.log(`Clicked on ${template.name}`)}>
                                     <CardContent className="p-4">
                                         <Image src={template.image} alt={template.name} width={600} height={400} className="w-full h-full object-cover" />
                                         <p className="text-sm font-medium">{template.name}</p>

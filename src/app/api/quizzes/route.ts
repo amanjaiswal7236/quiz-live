@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '~/server/db';
 import { getAuth } from '@clerk/nextjs/server';
+import { Quiz } from '@prisma/client';
 
 interface Answer {
   text: string;

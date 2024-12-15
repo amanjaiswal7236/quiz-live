@@ -3,10 +3,10 @@ import { db } from "~/server/db";
 import { getAuth } from "@clerk/nextjs/server";
 import { Quiz, User } from "@prisma/client";
 
-interface QuizUpdateData {
-  title?: string;
-  description?: string;
-}
+// interface QuizUpdateData {
+//   title?: string;
+//   description?: string;
+// }
 
 export async function DELETE(req: NextRequest, { params }: { params: { quizId: string } }) {
   const { quizId } = params;
@@ -108,7 +108,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { quizId: st
       );
     }
 
-    const body: QuizUpdateData = await req.json();
+    const body: Quiz = await req.json();
     await db.quiz.update({
       where: { id: quizId },
       data: body,
