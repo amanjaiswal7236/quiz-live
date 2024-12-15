@@ -146,7 +146,7 @@ export default function Page() {
                 <div className="max-w-6xl mx-auto p-8">
                     <header className="bg-white shadow-sm mb-8">
                         <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-                            <h1 className="text-2xl font-bold">Welcome, {user.user?.fullName || "Guest"}</h1>
+                            <h1 className="text-2xl font-bold">Welcome, {user.user?.fullName ?? "Guest"}</h1>
                             <div className="relative group">
                                 <UserButton afterSignOutUrl='/' />
                             </div>

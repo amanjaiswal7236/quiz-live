@@ -73,7 +73,7 @@ export function PresentationCard({
       <CardHeader className="p-0">
         <div className="relative aspect-video w-full bg-muted">
           <Image
-            src={images[currentImage] || ""}
+            src={images[currentImage] ?? ""}
             alt={title}
             fill
             className="object-cover"

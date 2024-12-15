@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "~/server/db";
 import { getAuth } from "@clerk/nextjs/server";
+import { Quiz, User } from "@prisma/client";
+
+interface QuizUpdateData {
+  title?: string;
+  description?: string;
+}
 
 export async function DELETE(req: NextRequest, { params }: { params: { quizId: string } }) {
   const { quizId } = params;
@@ -37,7 +43,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { quizId: s
         { status: 404 }
       );
     }
-    console.log("QuizCreatorId & UserId", quiz.creatorId, user.id)
+    // console.log("QuizCreatorId & UserId", quiz.creatorId, user.id)
     if (quiz.creatorId !== user.id) {
       return NextResponse.json(
         { error: "Forbidden: You do not have permission to delete this quiz" },
@@ -51,7 +57,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { quizId: s
 
     return NextResponse.json({ message: "Quiz deleted successfully" });
   } catch (error) {
-    console.error("Error deleting quiz:", error);
+    // console.error("Error deleting quiz:", error);
     return NextResponse.json(
       { error: "Failed to delete quiz" },
       { status: 500 }
@@ -102,7 +108,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { quizId: st
       );
     }
 
-    const body = await req.json();
+    const body: QuizUpdateData = await req.json();
     await db.quiz.update({
       where: { id: quizId },
       data: body,

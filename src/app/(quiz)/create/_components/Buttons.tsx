@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from 'react'
-import { Zap, Copy, Trash2, Plus } from 'lucide-react'
+import { Copy, Trash2, Plus } from 'lucide-react'
 import { gsap } from 'gsap'
 
 interface Slide {
@@ -72,9 +72,9 @@ export default function Buttons() {
       const newSlide: Slide = { 
         ...slides[currentSlide], 
         id: Date.now(), 
-        question: slides[currentSlide]?.question || '', 
-        answers: slides[currentSlide]?.answers || ['', '', '', ''], 
-        correctAnswer: slides[currentSlide]?.correctAnswer || 0 
+        question: slides[currentSlide]?.question ?? '', 
+        answers: slides[currentSlide]?.answers ?? ['', '', '', ''], 
+        correctAnswer: slides[currentSlide]?.correctAnswer ?? 0 
       }
       setSlides([...slides, newSlide])
       setCurrentSlide(slides.length)
@@ -207,7 +207,7 @@ export default function Buttons() {
                 index === currentSlide ? 'bg-teal-600' : 'bg-teal-700'
               }`}
             >
-              <p className="text-white text-sm truncate">{slide.question || 'New Slide'}</p>
+              <p className="text-white text-sm truncate">{slide.question ?? 'New Slide'}</p>
             </div>
           ))}
         </div>

@@ -2,6 +2,22 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '~/server/db';
 import { getAuth } from '@clerk/nextjs/server';
 
+interface Answer {
+  text: string;
+  isCorrect: boolean;
+}
+
+interface Question {
+  text: string;
+  answers: Answer[];
+}
+
+interface CreateQuizBody {
+  title: string;
+  description: string;
+  questions: Question[];
+}
+
 export async function POST(req: NextRequest) {
   const { userId } = getAuth(req);
 
@@ -9,7 +25,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const body = await req.json();
+  const body: CreateQuizBody = await req.json();
   const { title, description, questions } = body;
 
   // Validate the request body
@@ -28,10 +44,10 @@ export async function POST(req: NextRequest) {
         description,
         creator: { connect: { externalUserId: userId } },
         questions: {
-          create: questions.map((q: any) => ({
+          create: questions.map((q: Question) => ({
             text: q.text,
             answers: {
-              create: q.answers.map((a: any) => ({
+              create: q.answers.map((a: Answer) => ({
                 text: a.text,
                 isCorrect: a.isCorrect,
               })),

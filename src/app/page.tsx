@@ -94,7 +94,7 @@ export default function Home() {
             </span>
             <h2 className="text-4xl font-bold mt-6 mb-4">Get started in 3 steps</h2>
             <p className="text-xl text-gray-600">
-              Mentimeter helps you create, interact, and analyse - let's see how!
+              Mentimeter helps you create, interact, and analyse - let&apos;s see how!
             </p>
           </div>
 
@@ -102,7 +102,7 @@ export default function Home() {
             {[
               {
                 title: "Create",
-                description: "Whatever you're looking to create, Mentimeter has the answer. Make your presentation in seconds from a template, or start from scratch, add an interactive slide, and you're all set!",
+                description: "Whatever youre looking to create, Mentimeter has the answer. Make your presentation in seconds from a template, or start from scratch, add an interactive slide, and you're all set!",
                 bgColor: "bg-pink-100",
                 imgSrc: "/HowItWorksCreate.png"
               },
