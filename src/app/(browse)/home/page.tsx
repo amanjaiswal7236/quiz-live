@@ -10,6 +10,7 @@ import { Button } from '~/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 import { CloudIcon, BarChartIcon, PencilIcon, ScaleIcon, ListOrderedIcon, ImageIcon } from 'lucide-react'
 import { TutorialDialog } from './_components/tutorial-dialog'
+import Image from 'next/image'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -127,6 +128,13 @@ export default function Page() {
         { name: 'Pin on Image', icon: ImageIcon, color: 'text-pink-500' },
     ]
 
+    const templates = [
+        { name: 'Fun meeting kickstarter', image: '/meeting.avif' },
+        { name: 'Thesis check-in', image: '/thesis.avif' },
+        { name: 'Fun class icebreakers', image: '/class.avif' },
+        { name: 'Course evaluation survey', image: '/evaluation.avif' },
+    ]
+
     const [selectedTutorial, setSelectedTutorial] = useState<{ title: string; duration: string } | null>(null)
 
     return (
@@ -166,11 +174,11 @@ export default function Page() {
                     <section className="mb-24">
                         <h2 className="text-2xl font-semibold mb-4">Popular templates in Education</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                            {['Fun meeting kickstarter', 'Thesis check-in', 'Fun class icebreakers', 'Course evaluation survey'].map((template, index) => (
+                            {templates.map((template, index) => (
                                 <Card key={index} className="transition-all duration-300 hover:border-purple-700 hover:scale-105 cursor-pointer" onClick={() => console.log(`Clicked on ${template}`)}>
                                     <CardContent className="p-4">
-                                        <div className="h-32 bg-gray-200 mb-2 rounded"></div>
-                                        <p className="text-sm font-medium">{template}</p>
+                                        <Image src={template.image} alt={template.name} width={600} height={400} className="w-full h-full object-cover" />
+                                        <p className="text-sm font-medium">{template.name}</p>
                                     </CardContent>
                                 </Card>
                             ))}
