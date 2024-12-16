@@ -142,13 +142,13 @@ export default function Home() {
           <h2 className="text-4xl font-bold text-center mb-12">What our users say</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <Testimonial
-              quote="I now use Mentimeter each month at my team meetings to take a pulse check, it's easy to setup, fun to use, and very informative!"
+              quote="I now use Mentimeter each month at my team meetings to take a pulse check, it&quot;s easy to setup, fun to use, and very informative!"
               name="Carl Powell"
               position="Head of Delivery - Cloud and Infrastructure, Sky"
               avatarSrc="/logo.svg"
             />
             <Testimonial
-              quote="It's very helpful to make classes interactive and motivating!"
+              quote="It&quot;s very helpful to make classes interactive and motivating!"
               name="Sandra Elizabeth Cobián Pozos"
               position="High School Teacher, Universidad de Guadalajara, México"
               avatarSrc="/logo.svg"
