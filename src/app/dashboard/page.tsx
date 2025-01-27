@@ -11,6 +11,7 @@ import { ViewToggle } from './_components/view-toggle'
 import { FolderCard } from './_components/folder-card'
 import { PresentationCard } from './_components/presentation-card'
 import { PresentationList } from './_components/presentation-list'
+import Link from 'next/link'
 
 interface Folder {
   id: string
@@ -85,10 +86,10 @@ export default function DashboardPage() {
   }
 
   const handleMovePresentationToFolder = (presentationId: string, folderId: string) => {
-    setPresentations(presentations.map(presentation => 
+    setPresentations(presentations.map(presentation =>
       presentation.id === presentationId ? { ...presentation, folderId } : presentation
     ))
-    setFolders(folders.map(folder => 
+    setFolders(folders.map(folder =>
       folder.id === folderId ? { ...folder, items: folder.items + 1 } : folder
     ))
   }
@@ -106,16 +107,18 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
               <h1 className="text-2xl font-bold tracking-tight">My presentations</h1>
               <div className="flex items-center space-x-2">
-                <Button>
-                  <Plus className="mr-2 h-4 w-4" />
-                  New Quiz
+                <Button asChild>
+                  <Link href='/edit'>
+                    <Plus className="mr-2 h-4 w-4" />
+                    New Quiz
+                  </Link>
                 </Button>
                 <NewFolderDialog onCreateFolder={handleCreateFolder} />
               </div>
             </div>
             <div className="mt-4 flex items-center justify-between">
               <div className="text-sm text-muted-foreground">
-                {folders.length > 0 
+                {folders.length > 0
                   ? `${folders.length} folders, ${presentations.length} presentations`
                   : `${presentations.length} presentations`}
               </div>

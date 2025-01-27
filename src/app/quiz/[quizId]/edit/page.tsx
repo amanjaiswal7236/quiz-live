@@ -1,21 +1,31 @@
 "use client"
 
 import { useState, useEffect, useRef } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { UserCircle, Menu, Square, CheckSquare, AlignJustify, Sliders, MapPin, ImageIcon, Type, Bot, X, Zap, ArrowLeft } from 'lucide-react'
 import { gsap } from 'gsap'
 import Sidebar from './_components/Sidebar'
-import Buttons from './_components/Buttons'
+import Buttons from './_components/question-type/Buttons'
 import { UserButton } from '@clerk/nextjs'
-import Reorder from './_components/Reorder'
-import Range from './_components/Range'
-import Pinpoint from './_components/Pinpoint'
-import TypeAnswer from './_components/TypeAnswer'
-import Checkboxes from './_components/Checkboxes'
+import Reorder from './_components/question-type/Reorder'
+import Range from './_components/question-type/Range'
+import Pinpoint from './_components/question-type/Pinpoint'
+import TypeAnswer from './_components/question-type/TypeAnswer'
+import Checkboxes from './_components/question-type/Checkboxes'
+import { useForm, FormProvider } from 'react-hook-form'
 
-export default function QuizCreator() {
+export default function QuizCreator({params}: {params: {quizId: string}}) {
+  const [quiz, setQuiz] = useState<any>(null)
+  const [currentQuestion, setCurrentQuestion] = useState<number>(0)
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const questionId = searchParams.get('question')
+  
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [selectedType, setSelectedType] = useState<string | null>(null)
   const questionTypesRef = useRef(null)
+
+  const methods = useForm()
 
   const questionTypes = [
     { name: 'Buttons', icon: Square, description: 'One correct answer', color: 'bg-blue-500', hoverColor: 'hover:bg-blue-600' },
@@ -28,30 +38,21 @@ export default function QuizCreator() {
     { name: 'AI assisted', icon: Bot, description: 'Generate questions with AI', color: 'bg-cyan-500', hoverColor: 'hover:bg-cyan-600' },
   ]
 
-  // useEffect(() => {
-  //   const ctx = gsap.context(() => {
-  //     if (questionTypesRef.current && questionTypesRef.current.children) {
-  //       gsap.from(questionTypesRef.current.children, {
-  //         opacity: 0,
-  //         y: 50,
-  //         stagger: 0.1,
-  //         duration: 0.8,
-  //         ease: "power3.out"
-  //       });
-  //     }
-  //   }, questionTypesRef);
-
-  //   return () => ctx.revert();
-  // }, [selectedType]);
-
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
 
   const handleTypeClick = (type: string) => {
     setSelectedType(type);
+    methods.reset();
   };
 
   const handleBack = () => {
     setSelectedType(null);
+    methods.reset();
+  };
+
+  const onSubmit = (data: any) => {
+    console.log(data); // Handle form submission
+    // You can add your logic here to save the quiz question
   };
 
   const renderSelectedComponent = () => {
@@ -96,9 +97,14 @@ export default function QuizCreator() {
         </header>
         <main className="flex-1 p-4 sm:p-6 lg:p-8">
           <div className="max-w-7xl mx-auto">
+            <h2 className='text-3xl font-bold text-black mb-8'>
+              Select a question type
+            </h2>
+          </div>
+          <div className="max-w-7xl mx-auto">
             {!selectedType ? (
               <>
-                <h2 className="text-3xl font-bold text-white mb-8">Add Slide</h2>
+                <h2 className="text-3xl font-bold text-black mb-8">Add Slide</h2>
                 <div ref={questionTypesRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                   {questionTypes.map((type, index) => (
                     <div 
@@ -130,7 +136,17 @@ export default function QuizCreator() {
                   <ArrowLeft className="w-6 h-6" />
                 </button>
                 <h2 className="text-2xl font-bold mb-4 text-white">Selected: {selectedType}</h2>
-                {renderSelectedComponent()}
+                <FormProvider {...methods}>
+                  <form onSubmit={methods.handleSubmit(onSubmit)}>
+                    {renderSelectedComponent()}
+                    <button 
+                      type="submit" 
+                      className="mt-4 bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600 transition-colors"
+                    >
+                      Save Question
+                    </button>
+                  </form>
+                </FormProvider>
               </div>
             )}
           </div>

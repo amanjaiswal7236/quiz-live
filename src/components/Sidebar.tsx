@@ -37,7 +37,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
           <nav>
             <ul className="space-y-2">
               <li>
-                <Link href="#" className="flex items-center space-x-2 p-2 rounded hover:bg-gray-800">
+                <Link href="/home" className="flex items-center space-x-2 p-2 rounded hover:bg-gray-800">
                   <Home className="w-5 h-5" />
                   <span>Home</span>
                 </Link>

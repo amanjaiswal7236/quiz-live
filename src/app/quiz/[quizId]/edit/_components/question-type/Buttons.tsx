@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { Copy, Trash2, Plus } from 'lucide-react'
 import { gsap } from 'gsap'
+import { useFormContext } from 'react-hook-form'
 
 interface Slide {
   id: number;
@@ -12,6 +13,7 @@ interface Slide {
 }
 
 export default function Buttons() {
+  const { register, watch, setValue } = useFormContext()
   const [mediaAdded, setMediaAdded] = useState(false)
   const [slides, setSlides] = useState<Slide[]>([
     { id: 1, question: '', answers: ['', '', '', ''], correctAnswer: 0 }
@@ -20,36 +22,20 @@ export default function Buttons() {
   const formRef = useRef<HTMLDivElement>(null)
   const slidesPreviewRef = useRef<HTMLDivElement>(null)
 
-  // useEffect(() => {
-  //   if (formRef.current) {
-  //     gsap.from(formRef.current.children, {
-  //       opacity: 0,
-  //       y: 20,
-  //       stagger: 0.1,
-  //       duration: 0.5,
-  //       ease: "power3.out"
-  //     })
-  //   }
-  // }, [currentSlide])
+  const watchedSlides = watch('slides')
 
-  // useEffect(() => {
-  //   if (slidesPreviewRef.current) {
-  //     gsap.from(slidesPreviewRef.current.children, {
-  //       opacity: 0,
-  //       x: 20,
-  //       stagger: 0.1,
-  //       duration: 0.5,
-  //       ease: "power3.out"
-  //     })
-  //   }
-  // }, [slides])
+  useEffect(() => {
+    if (watchedSlides) {
+      setSlides(watchedSlides)
+    }
+  }, [watchedSlides])
 
   const handleQuestionChange = (value: string) => {
     const updatedSlides = [...slides]
     if (updatedSlides[currentSlide]) {
       updatedSlides[currentSlide].question = value
     }
-    setSlides(updatedSlides)
+    setValue('slides', updatedSlides)
   }
 
   const handleAnswerChange = (index: number, value: string) => {
@@ -57,7 +43,7 @@ export default function Buttons() {
     if (updatedSlides[currentSlide]) {
       updatedSlides[currentSlide].answers[index] = value
     }
-    setSlides(updatedSlides)
+    setValue('slides', updatedSlides)
   }
   
   const handleCorrectAnswerChange = (index: number) => {
@@ -65,33 +51,35 @@ export default function Buttons() {
     if (updatedSlides[currentSlide]) {
       updatedSlides[currentSlide].correctAnswer = index
     }
-    setSlides(updatedSlides)
+    setValue('slides', updatedSlides)
   }
 
   const handleDuplicateSlide = () => {
-      const newSlide: Slide = { 
-        ...slides[currentSlide], 
-        id: Date.now(), 
-        question: slides[currentSlide]?.question ?? '', 
-        answers: slides[currentSlide]?.answers ?? ['', '', '', ''], 
-        correctAnswer: slides[currentSlide]?.correctAnswer ?? 0 
-      }
-      setSlides([...slides, newSlide])
-      setCurrentSlide(slides.length)
+    const newSlide: Slide = { 
+      ...slides[currentSlide], 
+      id: Date.now(), 
+      question: slides[currentSlide]?.question ?? '', 
+      answers: slides[currentSlide]?.answers ?? ['', '', '', ''], 
+      correctAnswer: slides[currentSlide]?.correctAnswer ?? 0 
     }
+    const updatedSlides = [...slides, newSlide]
+    setValue('slides', updatedSlides)
+    setCurrentSlide(updatedSlides.length - 1)
+  }
 
   const handleDeleteSlide = () => {
     if (slides.length > 1) {
       const updatedSlides = slides.filter((_, index) => index !== currentSlide)
-      setSlides(updatedSlides)
+      setValue('slides', updatedSlides)
       setCurrentSlide(Math.min(currentSlide, updatedSlides.length - 1))
     }
   }
 
   const handleNewSlide = () => {
     const newSlide = { id: Date.now(), question: '', answers: ['', '', '', ''], correctAnswer: 0 }
-    setSlides([...slides, newSlide])
-    setCurrentSlide(slides.length)
+    const updatedSlides = [...slides, newSlide]
+    setValue('slides', updatedSlides)
+    setCurrentSlide(updatedSlides.length - 1)
   }
 
   return (
@@ -135,10 +123,6 @@ export default function Buttons() {
                 >
                   Add media
                 </button>
-                {/* <div className="flex items-center justify-center text-white">
-                  <Zap className="w-5 h-5 mr-2" />
-                  <span>Generate with AI</span>
-                </div> */}
               </div>
             )}
           </div>
@@ -149,14 +133,10 @@ export default function Buttons() {
           <div>
             <div className="flex justify-between items-center mb-2">
               <label htmlFor="question" className="block text-white text-lg">Question</label>
-              {/* <button className="flex items-center text-teal-300 hover:text-teal-100 transition-colors">
-                <Zap className="w-4 h-4 mr-1" />
-                Generate with AI
-              </button> */}
             </div>
             <textarea 
               id="question"
-              value={slides[currentSlide]?.question}
+              {...register(`slides.${currentSlide}.question`)}
               onChange={(e) => handleQuestionChange(e.target.value)}
               className="w-full p-3 rounded-lg bg-teal-700 text-white placeholder-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
               rows={3}
@@ -167,10 +147,6 @@ export default function Buttons() {
           <div>
             <div className="flex justify-between items-center mb-2">
               <label className="block text-white text-lg">Answers</label>
-              {/* <button className="flex items-center text-teal-300 hover:text-teal-100 transition-colors">
-                <Zap className="w-4 h-4 mr-1" />
-                Generate with AI
-              </button> */}
             </div>
             {slides[currentSlide]?.answers.map((answer, index) => (
               <div key={index} className="flex items-center space-x-2 mb-2">
@@ -184,7 +160,7 @@ export default function Buttons() {
                 </button>
                 <input 
                   type="text"
-                  value={answer}
+                  {...register(`slides.${currentSlide}.answers.${index}`)}
                   onChange={(e) => handleAnswerChange(index, e.target.value)}
                   className="flex-grow p-2 rounded-lg bg-teal-700 text-white placeholder-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
                   placeholder={index === 0 ? "Required" : "Optional"}
@@ -222,3 +198,4 @@ export default function Buttons() {
     </div>
   )
 }
+

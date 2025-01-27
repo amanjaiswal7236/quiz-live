@@ -24,6 +24,8 @@ export default function Page() {
     const tutorialsRef = useRef<HTMLDivElement>(null)
     const sidebarRef = useRef<HTMLDivElement>(null)
     const userIconRef = useRef<HTMLDivElement>(null)
+    const activeSessionsRef = useRef<HTMLDivElement>(null)
+    const recentQuizzesRef = useRef<HTMLDivElement>(null)
 
     const user = useUser();
 
@@ -70,6 +72,27 @@ export default function Page() {
         }, "-=0.2").to(recentlyViewedRef.current, {
             opacity: 1, // Ensure opacity is set to 1
         });
+
+        // if (activeSessionsRef.current) {
+        //     timeline.from(activeSessionsRef.current.children, {
+        //         y: 20,
+        //         opacity: 0,
+        //         duration: 0.5,
+        //         stagger: 0.2,
+        //         ease: "power3.out"
+        //     }, "-=0.2");
+        // }
+
+        // if (recentQuizzesRef.current) {
+        //     timeline.from(recentQuizzesRef.current.children, {
+        //         y: 20,
+        //         opacity: 0,
+        //         duration: 0.5,
+        //         stagger: 0.2,
+        //         ease: "power3.out"
+        //     }, "-=0.2");
+        // }
+
 
         if (templatesRef.current) {
             gsap.from(templatesRef.current.children, {
@@ -153,7 +176,7 @@ export default function Page() {
                         </div>
                     </header>
                     <div className="flex space-x-4 mb-8">
-                        <Button asChild><Link href="/create">New Quiz</Link></Button>
+                        <Button asChild><Link href="/quiz/new">New Quiz</Link></Button>
                         <Button variant="outline">Start with AI</Button>
                         <Button variant="outline">Import presentation</Button>
                     </div>
@@ -169,6 +192,74 @@ export default function Page() {
                                 <p className="text-sm text-gray-400">Edited Sep 22, 2024</p>
                             </CardContent>
                         </Card>
+                    </section>
+
+                    <section ref={activeSessionsRef} className="mb-24">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-2xl font-semibold">Active Sessions</h2>
+                            <Button variant="link" className="text-primary">View All</Button>
+                        </div>
+                        <div className="space-y-4">
+                            <Card>
+                                <CardContent className="p-4">
+                                    <div className="flex justify-between items-center">
+                                        <div>
+                                            <h3 className="font-medium">Mathematics Quiz</h3>
+                                            <p className="text-sm text-gray-500">12 participants</p>
+                                        </div>
+                                        <span className="px-2 py-1 text-sm bg-green-100 text-green-700 rounded">Live</span>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                            <Card>
+                                <CardContent className="p-4">
+                                    <div className="flex justify-between items-center">
+                                        <div>
+                                            <h3 className="font-medium">Science Quiz</h3>
+                                            <p className="text-sm text-gray-500">8 participants</p>
+                                        </div>
+                                        <span className="px-2 py-1 text-sm bg-green-100 text-green-700 rounded">Live</span>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </div>
+                    </section>
+
+                    <section ref={recentQuizzesRef} className="mb-24">
+                        <div className="flex justify-between items-center mb-4">
+                            <h2 className="text-2xl font-semibold">Recent Quizzes</h2>
+                            <Button variant="link" className="text-primary">View All</Button>
+                        </div>
+                        <div className="space-y-4">
+                            <Card>
+                                <CardContent className="p-4">
+                                    <div className="flex justify-between items-center">
+                                        <div>
+                                            <h3 className="font-medium">History Quiz</h3>
+                                            <p className="text-sm text-gray-500">Completed 2h ago</p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="font-medium">24 players</p>
+                                            <p className="text-sm text-gray-500">Avg: 82%</p>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                            <Card>
+                                <CardContent className="p-4">
+                                    <div className="flex justify-between items-center">
+                                        <div>
+                                            <h3 className="font-medium">Geography Quiz</h3>
+                                            <p className="text-sm text-gray-500">Completed 5h ago</p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="font-medium">18 players</p>
+                                            <p className="text-sm text-gray-500">Avg: 75%</p>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </div>
                     </section>
 
                     <section className="mb-24">
@@ -231,3 +322,4 @@ export default function Page() {
         </div>
     )
 }
+
